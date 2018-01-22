@@ -3,12 +3,12 @@ from PIL import Image
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.misc import imsave
 from vgg16_avg import VGG16_Avg
-
-#import tensorflow as tf
-
 from keras import metrics
 from keras.models import Model
 from keras import backend as K
+
+import tensorflow as tf
+
 work_dir = ''
 
 content_image = Image.open(work_dir + 'bird_orig.png')
@@ -24,18 +24,12 @@ def add_imagenet_mean(image, s):
     return np.clip(image.reshape(s)[:, :, :, ::-1] + imagenet_mean, 0, 255)
 
 
-def generate_rand_img(shape):
-    return np.random.uniform(-2.5, 2.5, shape)/1
-
+vgg_model = VGG16_Avg(include_top=False)
+content_layer = vgg_model.get_layer('block5_conv1').output
+content_model = Model(vgg_model.input, content_layer)
 
 content_image_array = subtract_imagenet_mean(np.expand_dims(np.array(content_image), 0))
 content_image_shape = content_image_array.shape
-
-vgg_model = VGG16_Avg(include_top=False)
-
-content_layer = vgg_model.get_layer('block5_conv1').output
-
-content_model = Model(vgg_model.input, content_layer)
 target = K.variable(content_model.predict(content_image_array))
 
 
@@ -59,20 +53,22 @@ cost_function = K.function([vgg_model.input], [mse_loss]+grads)
 optimiser = ConvexOptimiser(cost_function, content_image_shape)
 
 
-def optimise(optimiser, iterations, point, tensor_shape):
+def optimise(optimiser, iterations, point, tensor_shape, file_name):
     for i in range(iterations):
         point, min_val, info = fmin_l_bfgs_b(optimiser.loss, point.flatten(),
                                          fprime=optimiser.gradients, maxfun=20)
         point = np.clip(point, -127, 127)
         print('Loss:', min_val)
-        imsave(work_dir + f'gen_image_{i}.png', add_imagenet_mean(point.copy(), tensor_shape)[0])
+        imsave(work_dir + 'gen_'+file_name+'_{i}.png', add_imagenet_mean(point.copy(), tensor_shape)[0])
     return point
 
 
+def generate_rand_img(shape):
+    return np.random.uniform(-2.5, 2.5, shape)/1
 generated_image = generate_rand_img(content_image_shape)
 
-iterations = 2
-generated_image = optimise(optimiser, iterations, generated_image, content_image_shape)
+iterations = 10
+generated_image = optimise(optimiser, iterations, generated_image, content_image_shape, 'content')
 
 
 # Style transfer
@@ -104,7 +100,7 @@ style_fn = K.function([vgg_model.input], [style_loss]+grads)
 optimiser = ConvexOptimiser(style_fn, style_image_shape)
 
 generated_image = generate_rand_img(style_image_shape)
-generated_image = optimise(optimiser, iterations, generated_image, style_image_shape)
+generated_image = optimise(optimiser, iterations, generated_image, style_image_shape, 'style')
 
 
 

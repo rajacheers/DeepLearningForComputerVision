@@ -3,6 +3,7 @@ import tensorflow as tf
 
 from .resnet50 import ResNet50
 nb_labels = 6
+input_shape = [28, 28]
 
 img_height, img_width, _ = input_shape
 input_tensor = tf.keras.layers.Input(shape=input_shape)

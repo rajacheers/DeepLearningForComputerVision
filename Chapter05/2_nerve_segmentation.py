@@ -30,16 +30,16 @@ def preprocess(imgs):
     return imgs_p
 
 
-def covolution_layer(filters, kernel=(3,3), activation='relu', input_shape=None):
+def convolution_layer(filters, kernel=(3,3), activation='relu', input_shape=None):
     if input_shape is None:
         return tf.keras.layers.Conv2D(
             filters=filters,
-            kernel=kernel,
+            kernel_size=kernel,
             activation=activation)
     else:
         return tf.keras.layers.Conv2D(
             filters=filters,
-            kernel=kernel,
+            kernel_size=kernel,
             activation=activation,
             input_shape=input_shape)
 
@@ -63,42 +63,42 @@ def pooling_layer():
 unet = tf.keras.models.Sequential()
 inputs = tf.keras.layers.Input((image_height, image_width, 1))
 input_shape = (image_height, image_width, 1)
-unet.add(covolution_layer(32, input_shape=input_shape))
-unet.add(covolution_layer(32))
+unet.add(convolution_layer(32, input_shape=input_shape))
+unet.add(convolution_layer(32))
 unet.add(pooling_layer())
 
-unet.add(covolution_layer(64))
-unet.add(covolution_layer(64))
+unet.add(convolution_layer(64))
+unet.add(convolution_layer(64))
 unet.add(pooling_layer())
 
-unet.add(covolution_layer(128))
-unet.add(covolution_layer(128))
+unet.add(convolution_layer(128))
+unet.add(convolution_layer(128))
 unet.add(pooling_layer())
 
-unet.add(covolution_layer(256))
-unet.add(covolution_layer(256))
+unet.add(convolution_layer(256))
+unet.add(convolution_layer(256))
 unet.add(pooling_layer())
 
-unet.add(covolution_layer(512))
-unet.add(covolution_layer(512))
+unet.add(convolution_layer(512))
+unet.add(convolution_layer(512))
 
 unet.add(concatenated_de_convolution_layer(256))
-unet.add(covolution_layer(256))
-unet.add(covolution_layer(256))
+unet.add(convolution_layer(256))
+unet.add(convolution_layer(256))
 
 unet.add(concatenated_de_convolution_layer(128))
-unet.add(covolution_layer(128))
-unet.add(covolution_layer(128))
+unet.add(convolution_layer(128))
+unet.add(convolution_layer(128))
 
 unet.add(concatenated_de_convolution_layer(64))
-unet.add(covolution_layer(64))
-unet.add(covolution_layer(64))
+unet.add(convolution_layer(64))
+unet.add(convolution_layer(64))
 
 unet.add(concatenated_de_convolution_layer(32))
-unet.add(covolution_layer(32))
-unet.add(covolution_layer(32))
+unet.add(convolution_layer(32))
+unet.add(convolution_layer(32))
 
-unet.add(covolution_layer(1, kernel=(1, 1), activation='sigmoid'))
+unet.add(convolution_layer(1, kernel=(1, 1), activation='sigmoid'))
 
 unet.compile(optimizer=tf.keras.optimizers.Adam(lr=1e-5),
               loss=dice_coefficient_loss,

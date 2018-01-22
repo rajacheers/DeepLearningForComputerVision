@@ -11,6 +11,7 @@ Chapter03/LICENSE
 Chapter03/tensorflow_inception_graph.pb
 Chapter03/stitched_filters_3x3.png
 Chapter03/cropped_panda.jpg
+Chapter08/gen_*
 .idea/*
 # Byte-compiled / optimized / DLL files
 __pycache__/

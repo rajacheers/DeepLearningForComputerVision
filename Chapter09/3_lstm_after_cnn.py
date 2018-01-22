@@ -1,5 +1,5 @@
 import tensorflow as tf
-input_shape = []
+input_shape = [500,500]
 no_classes = 2
 
 net = tf.keras.models.Sequential()
