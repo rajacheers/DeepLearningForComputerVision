@@ -1,6 +1,5 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
-from tensorflow.contrib.tensorboard.plugins import projector
 import os
 import numpy as np
 
@@ -99,6 +98,8 @@ with tf.name_scope('accuracy'):
 tf.summary.scalar('accuracy', accuracy_operation)
 
 session = tf.Session()
+
+# Adding the variable in between creating the session and initialising the graph
 no_embedding_data = 1000
 embedding_variable = tf.Variable(tf.stack(
     mnist.test.images[:no_embedding_data], axis=0), trainable=False)
@@ -118,7 +119,7 @@ for batch_no in range(total_batches):
     })
     train_summary_writer.add_summary(merged_summary, batch_no)
 
-work_dir = '/Users/i335713/Google Drive/book/code/new/chapter3/'
+work_dir = ''  # change path
 metadata_path = '/tmp/train/metadata.tsv'
 
 with open(metadata_path, 'w') as metadata_file:
@@ -126,6 +127,7 @@ with open(metadata_path, 'w') as metadata_file:
         metadata_file.write('{}\n'.format(
             np.nonzero(mnist.test.labels[::1])[1:][0][i]))
 
+from tensorflow.contrib.tensorboard.plugins import projector
 projector_config = projector.ProjectorConfig()
 embedding_projection = projector_config.embeddings.add()
 embedding_projection.tensor_name = embedding_variable.name

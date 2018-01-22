@@ -20,7 +20,6 @@ epoch_steps = no_train // batch_size
 test_steps = no_test // batch_size
 
 model = tf.keras.applications.VGG16(include_top=False)
-
 model_fine_tune = tf.keras.models.Sequential()
 model_fine_tune.add(tf.keras.layers.Flatten(input_shape=model.output_shape))
 model_fine_tune.add(tf.keras.layers.Dense(256, activation='relu'))

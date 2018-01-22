@@ -56,13 +56,7 @@ pooling_layer_1 = pooling_layer(convolution_layer_1)
 convolution_layer_2 = convolution_layer(pooling_layer_1, 128)
 pooling_layer_2 = pooling_layer(convolution_layer_2)
 dense_layer_bottleneck = convolution_layer(pooling_layer_2, 1024, [5, 5])
-dropout_bool = tf.placeholder(tf.bool)
-dropout_layer = tf.layers.dropout(
-        inputs=dense_layer_bottleneck,
-        rate=0.4,
-        training=dropout_bool
-    )
-logits = convolution_layer(dropout_layer, no_classes, [1, 1])
+logits = convolution_layer(dense_layer_bottleneck, no_classes, [1, 1])
 logits = tf.reshape(logits, [-1, 10])
 
 with tf.name_scope('loss'):
@@ -102,7 +96,6 @@ for batch_no in range(total_batches):
                                     feed_dict={
         x_input: train_images,
         y_input: train_labels,
-        dropout_bool: True
     })
     train_summary_writer.add_summary(merged_summary, batch_no)
     if batch_no % 10 == 0:
@@ -110,6 +103,5 @@ for batch_no in range(total_batches):
                                          accuracy_operation], feed_dict={
             x_input: test_images,
             y_input: test_labels,
-            dropout_bool: False
         })
         test_summary_writer.add_summary(merged_summary, batch_no)

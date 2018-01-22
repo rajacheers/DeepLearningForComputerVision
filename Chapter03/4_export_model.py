@@ -15,7 +15,6 @@ tf_example = tf.parse_example(tf.placeholder(tf.string, name='tf_example'),
                               {'x': tf.FixedLenFeature(shape=[784], dtype=tf.float32), })
 x_input = tf.identity(tf_example['x'], name='x')
 
-#x_input = tf.placeholder(tf.float32, shape=[None, input_size])
 y_input = tf.placeholder(tf.float32, shape=[None, no_classes])
 weights = tf.Variable(tf.random_normal([input_size, no_classes]))
 bias = tf.Variable(tf.random_normal([no_classes]))

@@ -13,9 +13,6 @@ model_url = 'https://storage.googleapis.com/download.tensorflow.org/models/incep
 
 file_name = model_url.split('/')[-1]
 
-if not os.path.exists(work_dir):
-    os.makedirs(work_dir)
-
 file_path = os.path.join(work_dir, file_name)
 
 if not os.path.exists(file_path):
@@ -27,7 +24,6 @@ zip_handle.close()
 
 graph = tf.Graph()
 session = tf.InteractiveSession(graph=graph)
-
 model_path = os.path.join(work_dir, 'tensorflow_inception_graph.pb')
 with gfile.FastGFile(model_path, 'rb') as f:
     graph_defnition = tf.GraphDef()
@@ -47,7 +43,6 @@ def resize_image(image, size):
 
 
 image_name = 'mountain.jpg'
-
 image = PIL.Image.open(image_name)
 image = np.float32(image)
 objective_fn = tf.square(graph.get_tensor_by_name("import/mixed4c:0"))
@@ -58,8 +53,8 @@ window_size = 51
 
 score = tf.reduce_mean(objective_fn)
 gradients = tf.gradients(score, input_placeholder)[0]
-octave_images = []
 
+octave_images = []
 for i in range(no_octave - 1):
     image_height_width = image.shape[:2]
     scaled_image = resize_image(image, np.int32(np.float32(image_height_width) / scale))

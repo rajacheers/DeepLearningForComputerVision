@@ -8,18 +8,11 @@ import numpy as np
 work_dir = ''
 
 model_url = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
-
-
 file_name = model_url.split('/')[-1]
-
-if not os.path.exists(work_dir):
-    os.makedirs(work_dir)
-
 file_path = os.path.join(work_dir, file_name)
 
 if not os.path.exists(file_path):
     file_path, _ = urllib.request.urlretrieve(model_url, file_path)
-
 tarfile.open(file_path, 'r:gz').extractall(work_dir)
 
 model_path = os.path.join(work_dir, 'classify_image_graph_def.pb')

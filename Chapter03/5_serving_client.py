@@ -15,7 +15,6 @@ port = 8000
 work_dir = '/tmp'
 
 
-
 def _create_rpc_callback():
   def _callback(result):
       response = numpy.array(

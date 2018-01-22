@@ -4,6 +4,7 @@ import tensorflow as tf
 
 image_width, image_height = 128, 128
 vgg_model = tf.keras.applications.vgg16.VGG16(include_top=False)
+
 input_image = vgg_model.input
 vgg_layer_dict = dict([(vgg_layer.name, vgg_layer) for vgg_layer in vgg_model.layers[1:]])
 vgg_layer_output = vgg_layer_dict['block5_conv1'].output
@@ -59,4 +60,3 @@ for i in range(n):
                          (image_height + margin) * j: (image_height + margin) * j + image_height, :] = img
 
 imsave('stitched_filters_%dx%d.png' % (n, n), stitched_filters)
-#PIL.Image.fromarray(stitched_filters).save('filters' , 'jpeg')

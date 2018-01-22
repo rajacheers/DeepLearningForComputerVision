@@ -48,7 +48,7 @@ def load_and_align_data(image_paths,
 
 
 def get_face_embeddings(image_paths,
-                        model='/Users/i335713/Downloads/20170512-110547/'):
+                        model=''):
     images = load_and_align_data(image_paths)
     with tf.Graph().as_default():
         with tf.Session() as sess:

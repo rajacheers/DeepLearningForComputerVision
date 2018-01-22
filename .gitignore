@@ -1,3 +1,17 @@
+*MNIST_data*
+Chapter02/test/*
+Chapter02/train/*
+Chapter03/inception5h.zip
+Chapter03/classify_image_graph_def.pb
+Chapter03/imagenet_2012_challenge_label_map_proto.pbtxt
+Chapter03/imagenet_comp_graph_label_strings.txt
+Chapter03/imagenet_synset_to_human_label_map.txt
+Chapter03/inception-2015-12-05.tgz
+Chapter03/LICENSE
+Chapter03/tensorflow_inception_graph.pb
+Chapter03/stitched_filters_3x3.png
+Chapter03/cropped_panda.jpg
+.idea/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

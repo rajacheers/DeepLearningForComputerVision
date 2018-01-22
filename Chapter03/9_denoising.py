@@ -12,6 +12,7 @@ total_batches = 2000
 x_input = tf.placeholder(tf.float32, shape=[None, input_size])
 y_input = tf.placeholder(tf.float32, shape=[None, input_size])
 
+
 def add_variable_summary(tf_variable, summary_name):
   with tf.name_scope(summary_name + '_summary'):
     mean = tf.reduce_mean(tf_variable)
